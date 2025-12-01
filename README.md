@@ -1,110 +1,152 @@
 🌦️ AI Weather Summariser
 
-Real-time AI-generated weather updates powered by Groq Llama & Open-Meteo
-
-The AI Weather Summariser is a lightweight agent that continuously monitors the weather for any location and generates natural, human-like summaries using Groq’s Llama model.
-It automatically detects changes in temperature, wind, humidity, or precipitation and prints a fresh summary instantly.
-
-No OpenWeather API required — uses Open-Meteo (free, no key) and Groq Llama for the summary.
+Real-time, AI-powered weather updates using Open-Meteo + Groq Llama
 
 
-🚀 Features
-✔️ AI-Powered Summaries
-Uses Groq Llama-3 to generate clean, short weather reports.
-Produces 1–3 sentence natural summaries.
 
-✔️ Real-Time Weather Updates
-Continuously polls the Open-Meteo API.
-Generates a new summary only when weather changes.
-
-✔️ Efficient Change Detection
-Watches humidity, temperature, precipitation & wind.
-Avoids repetitive output — only prints updates.
-
-✔️ Simple CLI Agent
-Run with one command.
-No browser, no excess UI, just clean terminal output.
+⭐ Overview
+AI Weather Summariser is a lightweight Python script that continuously monitors live weather conditions for any location and generates human-like, concise summaries using Groq’s LLaMA model.
+It detects changes in weather and prints a new summary only when the weather updates, making it perfect for terminals, dashboards, automation, and IoT setups.
 
 
-🧠 How It Works
-You provide a location name (e.g., "Bengaluru").
 
-The script fetches:
-Geo-coordinates (via Nominatim)
-Real-time weather (via Open-Meteo)
+🚫 No OpenWeather API used
+🛰️ Open-Meteo for real-time weather data
+🧠 Groq LLaMA for AI-generated summaries
+⏳ Continuous monitoring loop
 
-The weather data is turned into a prompt.
 
-Groq’s Llama model generates a human-like summary.
 
-A background loop keeps checking for changes and updates output.
+✨ Features
+Input by place name (e.g., "Bengaluru, India")
+Input by coordinates (lat,lon)
+Uses Nominatim for geocoding (OpenStreetMap)
+Uses Open-Meteo (no API key required)
+Generates short weather summaries only
+Detects weather changes by computing a “weather fingerprint”
+Prints updated summary only when weather changes
+Supports configurable polling interval
+Pure Python. Lightweight. No unnecessary dependencies.
+
+
+
+📁 File: ai_weather_summariser.py
+
+This script includes:
+
+Geocoding
+
+Real-time weather fetching
+
+LLaMA prompt engineering for concise summaries
+
+Intelligent weather-change detection
+
+Live monitoring loop
+
 
 
 🛠️ Installation
-1. Clone the repository
-git clone https://github.com/YOUR_USERNAME/ai-weather-summariser.git
-cd ai-weather-summariser
+1. Clone the repository:
+git clone https://github.com/thrivexlab/Weather_Summariser_v1/
+cd Weather_Summariser_v1/
 
-2. Install dependencies
-pip install -r requirements.txt
+2. Install dependencies:
+pip install groq requests python-dotenv
 
-3. Add your Groq API Key
+3. Set your Groq API key:
 
-Create a .env file:
+Create .env:
 
-GROQ_API_KEY=your_groq_key_here
-
-
-▶️ Usage
-
-Run the weather agent:
-
-python weather_agent.py
+GroqAPIKey=your_api_key_here
 
 
-By default, it monitors Bengaluru.
-You can edit the file to change the default location or modify the main function:
+or export manually:
 
-run_weather_agent("New York")
+export GroqAPIKey=your_api_key_here
+
+
+
+🚀 Usage
+Monitor weather by place name
+python ai_weather_summariser.py --place "Bengaluru, India"
+
+Monitor by coordinates
+python ai_weather_summariser.py --coords "12.9716,77.5946"
+
+Change polling interval (default: 60 sec)
+python ai_weather_summariser.py --place "Mumbai" --poll 30
+
+Use a different Groq model
+python ai_weather_summariser.py --place "Delhi" --model llama-3.1-8b-instant
+
+
+
+🧠 How It Works
+1. Geocoding
+
+Converts place name → latitude, longitude (via Nominatim)
+
+2. Fetch Weather
+
+Uses Open-Meteo to retrieve current_weather + hourly fields
+
+3. Generate AI Summary
+
+Sends a structured JSON snapshot to Groq LLaMA
+
+LLaMA returns 1–3 sentence concise weather summary
+
+4. Smart Change Detection
+
+Weather fingerprint includes:
+
+Temperature
+
+Wind
+
+Humidity
+
+Precipitation
+
+Weather code
+
+If fingerprint changes → print new summary.
+
+
 
 📌 Example Output
-🌦 Weather Update:
-Cloudy skies over Bengaluru with mild temperatures and light winds. No rainfall expected for now.
------------------------
+Mostly cloudy in Bengaluru with 21°C temperature and light winds. No rainfall expected for now.
 
 
-📁 Project Structure
-📦 ai-weather-summariser
- ┣ 📜 weather_agent.py
- ┣ 📜 requirements.txt
- ┗ 📜 README.md
+
+🧩 Arguments
+Argument	Description
+--place	Place name (string)
+--coords	Coordinates in lat,lon format
+--poll	Polling interval in seconds
+--model	Groq model name
 
 
-🌐 APIs Used
-Open-Meteo
-Free, fast, no API key required
-Provides real-time global weather
 
-Groq Llama-3
-Ultra-fast inference
-Generates human-like summaries
+📜 Environment Variables
+Variable	Purpose
+GroqAPIKey	Required Groq API key
+
+
+🛡️ Notes
+Nominatim requires a User-Agent (handled in script)
+Open-Meteo is free and needs no API key
+Poll responsibly to avoid rate limits
+
+
+
+🤝 Contributing
+Pull requests are welcome!
+Feel free to open issues for new features or improvements.
 
 📄 License
-MIT Lisence
+MIT License
 
-
-💡 Future Improvements
-TTS weather voice assistant
-Web dashboard
-Push notifications
-Multi-location monitoring
-Integrate with smart-home devices
-
-
-⭐ Support & Contribution
-
-Feel free to:
-⭐ Star the repo
-🐛 Report issues
-🛠️ Submit PRs
-💬 Suggest new features
+⭐ Support the Project
+If you like this project, star the repo ⭐ on GitHub!
